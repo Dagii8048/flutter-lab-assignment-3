@@ -11,7 +11,7 @@ class AboutScreen extends StatelessWidget {
         title: const Text('About Me'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.go('/'),
         ),
       ),
       body: SingleChildScrollView(

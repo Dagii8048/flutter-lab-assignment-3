@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
-import '../bloc/album_bloc.dart';
+import '../models/album.dart';
 
 class AlbumDetailScreen extends StatelessWidget {
-  final int albumId;
+  final Album album;
 
-  const AlbumDetailScreen({super.key, required this.albumId});
+  const AlbumDetailScreen({super.key, required this.album});
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF128FFC),
@@ -20,82 +20,60 @@ class AlbumDetailScreen extends StatelessWidget {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.pop(),
+          onPressed: () => context.go('/'),
         ),
       ),
-      body: BlocBuilder<AlbumBloc, AlbumState>(
-        builder: (context, state) {
-          if (state is AlbumInitial) {
-            context.read<AlbumBloc>().add(LoadAlbumDetails(albumId));
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is AlbumLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is AlbumError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(state.message),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<AlbumBloc>().add(LoadAlbumDetails(albumId));
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (album.url != null && album.url!.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: CachedNetworkImage(
+                  imageUrl: album.url!,
+                  width: double.infinity,
+                  height: screenHeight * 0.4,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.error, size: 80),
+                ),
+              )
+            else
+              Container(
+                width: double.infinity,
+                height: screenHeight * 0.4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(Icons.photo, size: 80, color: Colors.grey),
               ),
-            );
-          }
-          if (state is AlbumDetailsLoaded) {
-            final album = state.album;
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (album.url != null)
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: CachedNetworkImage(
-                        imageUrl: album.url!,
-                        width: double.infinity,
-                        height: 260,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            const Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      ),
-                    ),
-                  const SizedBox(height: 24),
-                  Text(
-                    album.title,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF128FFC),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'This is a random description for the selected album. Enjoy exploring the album details and the beautiful photo fetched from the API!',
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 32),
-                  _buildDetailRow('Album ID', album.id.toString()),
-                  const SizedBox(height: 12),
-                  _buildDetailRow('User ID', album.userId.toString()),
-                ],
+            const SizedBox(height: 24),
+            Text(
+              album.title,
+              style: const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF128FFC),
               ),
-            );
-          }
-          return const Center(child: Text('Something went wrong'));
-        },
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'This is a random description for the selected album. Enjoy exploring the album details and the beautiful photo fetched from the API!',
+              style: TextStyle(fontSize: 16, color: Colors.black87),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            _buildDetailRow('Album ID', album.id.toString()),
+            const SizedBox(height: 12),
+            _buildDetailRow('User ID', album.userId.toString()),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,

@@ -56,17 +56,23 @@ class ApiService {
 
   Future<Album> getAlbumDetails(int albumId) async {
     try {
+      print('Fetching album details from: $baseUrl/albums/$albumId');
       final response = await _client.get(Uri.parse('$baseUrl/albums/$albumId'));
+      print('Album details response status: ${response.statusCode}');
       if (response.statusCode == 200) {
         final albumJson = json.decode(response.body);
+        print('Album JSON: $albumJson');
         final album = Album.fromJson(albumJson);
 
         // Fetch photo for the album
+        print('Fetching photos for album $albumId');
         final photosResponse = await _client.get(
           Uri.parse('$baseUrl/photos?albumId=$albumId'),
         );
+        print('Photos response status: ${photosResponse.statusCode}');
         if (photosResponse.statusCode == 200) {
           final List<dynamic> photosJson = json.decode(photosResponse.body);
+          print('Photos JSON: $photosJson');
           if (photosJson.isNotEmpty) {
             final photo = photosJson.first;
             return Album(
@@ -84,6 +90,7 @@ class ApiService {
         throw Exception('Failed to load album details');
       }
     } catch (e) {
+      print('Error in getAlbumDetails: $e');
       throw Exception('Error fetching album details: $e');
     }
   }

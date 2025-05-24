@@ -92,7 +92,7 @@ class AlbumListScreen extends StatelessWidget {
             ),
             subtitle: Text('Album ID: ${album.id}'),
             onTap: () {
-              context.go('/album/${album.id}');
+              context.go('/album-details', extra: album);
             },
           ),
         );

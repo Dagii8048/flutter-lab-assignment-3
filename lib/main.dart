@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       create: (context) => AlbumBloc(apiService),
       child: MaterialApp.router(
         title: 'Album Viewer',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: const Color(0xFF128FFC),

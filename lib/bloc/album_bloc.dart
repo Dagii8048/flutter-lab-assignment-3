@@ -84,11 +84,14 @@ class AlbumBloc extends Bloc<AlbumEvent, AlbumState> {
     LoadAlbumDetails event,
     Emitter<AlbumState> emit,
   ) async {
+    print('Loading album details for ID: ${event.albumId}');
     emit(AlbumLoading());
     try {
       final album = await _apiService.getAlbumDetails(event.albumId);
+      print('Album details loaded: $album');
       emit(AlbumDetailsLoaded(album));
     } catch (e) {
+      print('Error loading album details: $e');
       emit(AlbumError(e.toString()));
     }
   }
