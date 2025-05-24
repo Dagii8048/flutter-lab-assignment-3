@@ -53,8 +53,8 @@ class AboutScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'A passionate Flutter developer with a keen eye for creating beautiful and functional mobile applications. '
-              'Currently pursuing studies in Computer Science, focusing on mobile app development and user experience design. '
+              'A passionate Software developer with a keen eye for creating beautiful and functional mobile and web applications. '
+              'Currently pursuing studies in Software Engineering, focusing on mobile app development and user experience design. '
               'This album viewer app is a demonstration of clean architecture, state management, and modern UI/UX practices.',
               style: TextStyle(fontSize: 16, height: 1.5),
               textAlign: TextAlign.center,
