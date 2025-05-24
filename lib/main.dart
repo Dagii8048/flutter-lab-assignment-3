@@ -11,7 +11,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final ApiService apiService;
-  
+
   const MyApp({super.key, required this.apiService});
 
   @override
@@ -21,8 +21,24 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'Album Viewer',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color(0xFF128FFC),
+            primary: const Color(0xFF128FFC),
+          ),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Color(0xFF128FFC),
+            foregroundColor: Colors.white,
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: Color(0xFF128FFC),
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.white70,
+          ),
         ),
         routerConfig: router,
       ),

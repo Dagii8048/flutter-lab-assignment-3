@@ -1,24 +1,19 @@
 import 'package:go_router/go_router.dart';
-import 'package:flutter/material.dart';
-import 'package:your_app_name/screens/album_list_screen.dart';
-import 'package:your_app_name/screens/album_detail_screen.dart';
+import 'screens/about_screen.dart';
+import 'screens/album_detail_screen.dart';
+import 'screens/album_list_screen.dart';
 
-final GoRouter router = GoRouter(
-  routes: <RouteBase>[
+final router = GoRouter(
+  initialLocation: '/',
+  routes: [
+    GoRoute(path: '/', builder: (context, state) => const AlbumListScreen()),
     GoRoute(
-      path: '/',
-      builder: (BuildContext context, GoRouterState state) {
-        return const AlbumListScreen();
+      path: '/album/:id',
+      builder: (context, state) {
+        final albumId = int.parse(state.pathParameters['id']!);
+        return AlbumDetailScreen(albumId: albumId);
       },
-      routes: <RouteBase>[
-        GoRoute(
-          path: 'albumDetail/:albumId',
-          builder: (BuildContext context, GoRouterState state) {
-            final albumId = int.parse(state.pathParameters['albumId']!);
-            return AlbumDetailScreen(albumId: albumId);
-          },
-        ),
-      ],
     ),
+    GoRoute(path: '/about', builder: (context, state) => const AboutScreen()),
   ],
 );

@@ -1,6 +1,3 @@
-import '../models/album.dart';
-import '../models/photo.dart';
-
 sealed class AlbumEvent {}
 
 class FetchAlbums extends AlbumEvent {}
